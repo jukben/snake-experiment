@@ -4,6 +4,7 @@ import { Vibration } from "react-native"
 import type {Snake} from "./reducer"
 import {flatten} from "lodash"
 import {newPoint} from "./reducer"
+import { rotate } from "./actions"
 
 
 export const collisionDetectionEpic = (action$, deps) =>
@@ -14,6 +15,7 @@ export const collisionDetectionEpic = (action$, deps) =>
 
             if (loser) {
                 Vibration.vibrate(500)
+                Expo.Speech.speak(`${loser.color} is loser!`, {language: 'en'})
 
                 return Rx.Observable.of({
                     type: "GAME_OVER",
@@ -42,16 +44,17 @@ export const tickEpic = (action$, deps) =>
 
 export const pressEpic = (action$, deps) =>
     action$.ofType("PRESS_DOWN")
-        .switchMap(action => Rx.Observable
-            .interval(100)
-            .takeUntil(action$.ofType("PRESS_UP"))
-            .map(() => ({
-                type: "ROTATE",
-                payload: {
-                    player: action.payload.player,
-                    angle: action.payload.direction === "l" ? 15 : -15,
-                },
-            })))
+        .switchMap(action => Rx.Observable.merge(
+            Rx.Observable.of(rotate(
+                action.payload.player,
+                action.payload.direction)),
+            Rx.Observable
+                .interval(100)
+                .takeUntil(action$.ofType("PRESS_UP"))
+                .map(() => rotate(
+                    action.payload.player,
+                    action.payload.direction))
+        ))
 
 const collision = (snakes: Snake[], world_size: Point): Snake => {
     const all = flatten(snakes.map(s => s.history));

@@ -109,8 +109,6 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
         }
 
         case "GAME_OVER":
-            Expo.Speech.speak(`${action.payload.loser.color} is loser!`, {language: 'en'})
-
             return {
                 ...state,
                 paused: true,

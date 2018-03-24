@@ -1,5 +1,8 @@
 // @flow
 
+import type { Snake } from "./reducer"
+
+
 export const actionTick = () => ({
     type: "TICK",
 })
@@ -19,6 +22,14 @@ export const pressUp = (player: string, direction: Direction) => ({
     payload: {
         player: player,
         direction: direction,
+    },
+})
+
+export const rotate = (player: Snake, direction: Direction) => ({
+    type: "ROTATE",
+    payload: {
+        player: player,
+        angle: direction === "l" ? 15 : -15,
     },
 })
 
