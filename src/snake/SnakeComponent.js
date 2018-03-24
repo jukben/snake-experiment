@@ -12,8 +12,10 @@ type Props = {
 const SnakeComponent = (props: Props) => {
     return (
         <View style={{
-            flex: 1,
-        }}>
+            position: "absolute",
+            left: 0,
+            top: 0,
+}}>
             {props.snake.history.map((p) => (
                 <View
                     key={`${p.x}_${p.y}`}

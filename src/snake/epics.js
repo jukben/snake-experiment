@@ -19,16 +19,17 @@ export const collisionDetectionEpic = (action$, deps) =>
 
 
 const collision = (snakes: Snake[]): boolean => {
-    const all = flatten(snakes.map(s => s.history.slice(-1)))
 
-    console.log(all)
 
-    const collision = snakes.find(snake => {
-        const next = newPoint(snake.head, snake.direction)
-        return all.find(p =>
-            Math.sqrt((p.x - next.x) * (p.x - next.x)
-                + (p.y - next.y) * (p.y - next.y)) < 5) != null
-    })
 
-    return collision != null
+    const all = flatten(snakes.map(s => s.history));
+
+    const col = snakes.find(snake => {
+        const next = newPoint(snake.head, snake.direction);
+        return all.find((p) => {
+            return (((p.x - next.x) * (p.x - next.x) + (p.y - next.y) * (p.y - next.y)) < 16);
+        }
+    )})
+
+    return col;
 }
