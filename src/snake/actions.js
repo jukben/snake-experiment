@@ -4,17 +4,21 @@ export const actionTick = () => ({
     type: "TICK",
 })
 
-export const clickLeft = (player: string) => ({
-    type: "CLICK_LEFT",
+type Direction = "l" | "r"
+
+export const pressDown = (player: string, direction: Direction) => ({
+    type: "PRESS_DOWN",
     payload: {
         player: player,
+        direction: direction,
     },
 })
 
-export const clickRight = (player: string) => ({
-    type: "CLICK_RIGHT",
+export const pressUp = (player: string, direction: Direction) => ({
+    type: "PRESS_UP",
     payload: {
         player: player,
+        direction: direction,
     },
 })
 

@@ -35,6 +35,24 @@ export const tickEpic = (action$, deps) =>
             [{type: "TICK"}],
             []))
 
+// export const victoryEpic = (action$, deps) =>
+//     action$.ofType("GAME_OVER")
+//         .switchMap(() => Rx.Observable.fromPromise(fetch("https://www.google.com"))
+//             .map(() => ({ type: "GOOGLE_LOADED" })))
+
+export const pressEpic = (action$, deps) =>
+    action$.ofType("PRESS_DOWN")
+        .switchMap(action => Rx.Observable
+            .interval(100)
+            .takeUntil(action$.ofType("PRESS_UP"))
+            .map(() => ({
+                type: "ROTATE",
+                payload: {
+                    player: action.payload.player,
+                    angle: action.payload.direction === "l" ? 15 : -15,
+                },
+            })))
+
 const collision = (snakes: Snake[], world_size: Point): Snake => {
     const all = flatten(snakes.map(s => s.history));
     const col = snakes.find(snake => {

@@ -93,7 +93,7 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                 paused: !state.paused,
             }
 
-        case "CLICK_LEFT": {
+        case "ROTATE": {
             if (state.paused) {
                 return state
             }
@@ -102,22 +102,7 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                 snakes: state.snakes.map(snake => (snake.id === action.payload.player
                     ? {
                         ...snake,
-                        direction: rotateVector(snake.direction, 15),
-                    }
-                    : snake)),
-            }
-        }
-
-        case "CLICK_RIGHT": {
-            if (state.paused) {
-                return state
-            }
-            return {
-                ...state,
-                snakes: state.snakes.map(snake => (snake.id === action.payload.player
-                    ? {
-                        ...snake,
-                        direction: rotateVector(snake.direction, -15),
+                        direction: rotateVector(snake.direction, action.payload.angle),
                     }
                     : snake)),
             }
