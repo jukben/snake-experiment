@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { Button, Platform, StyleSheet, View } from "react-native"
+import { Button, Platform, StyleSheet, View, StatusBar } from "react-native"
 import { connect } from "react-redux"
 import Component from "./Component"
 import { actionButtonClick } from "./createReduxState"
@@ -38,6 +38,7 @@ class Root extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.container}>
+                <StatusBar hidden={true} />
                 <Stage />
             </View>
         )

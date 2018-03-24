@@ -1,7 +1,7 @@
 // @flow
 
 import React from "react"
-import { Button, View } from "react-native"
+import { Button, Text, TouchableOpacity, View } from "react-native"
 import type { Snake } from "./reducer"
 import SnakeComponent from "./SnakeComponent"
 import { connect } from "react-redux"
@@ -29,13 +29,21 @@ class Stage extends React.Component<Props> {
                 </View>
 
                 <View style={styles.buttons}>
-                    <View>
-                        <Button onPress={() => this.props.clickLeft("snake-1")} title="LEFT" />
-                        <Button onPress={() => this.props.clickRight("snake-1")} title="RIGHT" />
+                    <View style={[styles.buttons2, {transform: [{'rotate': '180deg'}]}]}>
+                        <TouchableOpacity style={styles.circle} onPress={() => this.props.clickLeft("snake-1")} >
+                            <Text style={styles.circleText}>L</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  style={styles.circle} onPress={() => this.props.clickRight("snake-1")} >
+                            <Text  style={styles.circleText}>R</Text>
+                        </TouchableOpacity>
                     </View>
-                    <View>
-                        <Button onPress={() => this.props.clickLeft("snake-2")} title="LEFT" />
-                        <Button onPress={() => this.props.clickRight("snake-2")} title="RIGHT" />
+                    <View style={styles.buttons2}>
+                        <TouchableOpacity  style={styles.circle} onPress={() => this.props.clickLeft("snake-2")} >
+                            <Text style={styles.circleText}>L</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity  style={styles.circle} onPress={() => this.props.clickRight("snake-2")} >
+                            <Text style={styles.circleText}>R</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -49,19 +57,33 @@ const styles = {
         justifyContent: 'center',
     },
     stage: {
-        borderColor: "grey",
-        borderWidth: 0.5,
-        borderRadius: 10,
-        backgroundColor: "lightgrey",
         alignSelf: "center",
     },
     buttons: {
         position: "absolute",
-        bottom: 0,
+        height: "100%",
         width: "100%",
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "space-between",
     },
+    buttons2: {
+        flexDirection: "row",
+        justifyContent: "center",
+    },
+    circle: {
+        width: 45,
+        height: 45,
+        borderRadius: 15,
+        backgroundColor: "orange",
+        justifyContent: "center",
+        margin: 15
+    },
+    circleText: {
+        fontSize: 26,
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    }
 }
 
 const mapStateToProps = (state: StateObject) => ({

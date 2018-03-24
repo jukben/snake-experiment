@@ -22,44 +22,38 @@ export type SnakeState = {
 
 export const createEmptyState = () => ({
     world_size: {
-        x: Dimensions.get("window").width - 42,
-        y: Dimensions.get("window").height - 42
+        x: Dimensions.get("window").width,
+        y: Dimensions.get("window").height
     },
     snakes: [
         {
             id: "snake-1",
             color: "green",
             head: {
-                x: 50,
-                y: 50,
+                x: Dimensions.get("window").width / 2,
+                y: 100,
             },
             direction: {
-                x: 5,
-                y: 0,
+                x: 0,
+                y: 5,
             },
             history: [
-                {
-                    x: 50,
-                    y: 50,
-                },
+
             ],
         },
         {
             id: "snake-2",
             color: "red",
             head: {
-                x: 50,
-                y: 100,
+                x: Dimensions.get("window").width /2,
+                y: Dimensions.get("window").height - 100,
             },
             direction: {
-                x: -5,
+                x: 0,
                 y: -5,
             },
             history: [
-                {
-                    x: 50,
-                    y: 100,
-                },
+
             ],
         }
     ],
