@@ -11,11 +11,7 @@ type Props = {
 
 const SnakeComponent = (props: Props) => {
     return (
-        <View style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-}}>
+        <View style={styles.cointainer}>
             {props.snake.history.map((p) => (
                 <View
                     key={`${p.x}_${p.y}`}
@@ -30,6 +26,14 @@ const SnakeComponent = (props: Props) => {
             ))}
         </View>
     )
+}
+
+const styles = {
+    cointainer: {
+        position: "absolute",
+        left: 0,
+        top: 0,
+    },
 }
 
 export default SnakeComponent

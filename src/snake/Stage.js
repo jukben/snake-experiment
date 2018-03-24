@@ -10,29 +10,27 @@ import { actionTick, clickLeft, clickRight } from "./actions"
 
 type Props = {
     snakes: Snake[],
-    tick: () => void,
     clickLeft: () => void,
     clickRight: () => void,
 }
 
 class Stage extends React.Component<Props> {
 
-    tick = () => this.props.tick()
-
-    componentDidMount() {
-        setInterval(() => this.tick(), 100)
-    }
-
     render() {
         return (
             <View style={{
                 flex: 1
             }}>
-                {this.props.snakes.map(snake => (
-                    <SnakeComponent key={snake.id} snake={snake} />
-                ))}
+                <View style={styles.stage}>
+                    {this.props.snakes.map(snake => (
+                        <SnakeComponent key={snake.id} snake={snake} />
+                    ))}
+                </View>
 
                 <View style={{
+                    position: "absolute",
+                    bottom: 0,
+                    width: "100%",
                     flexDirection: "row",
                     justifyContent: "space-between",
                 }}>
@@ -50,13 +48,20 @@ class Stage extends React.Component<Props> {
     }
 }
 
+const styles = {
+    stage: {
+        borderColor: "grey",
+        borderWidth: 0.5,
+        borderRadius: 10,
+        backgroundColor: "#eeeeee",
+    }
+}
 
 const mapStateToProps = (state: StateObject) => ({
     snakes: state.snake.snakes,
 })
 
 const mapDispatchToProps = {
-    tick: actionTick,
     clickLeft: clickLeft,
     clickRight: clickRight,
 }
