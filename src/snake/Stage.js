@@ -5,17 +5,33 @@ import { Button, Text, TouchableOpacity, View } from "react-native"
 import type { Snake } from "./reducer"
 import SnakeComponent from "./SnakeComponent"
 import { connect } from "react-redux"
-import { actionTick, clickLeft, clickRight } from "./actions"
+import { actionTick, clickLeft, clickPause, clickRight } from "./actions"
 
 
 type Props = {
     snakes: Snake[],
     world_size: Point,
+    loser: ?Snake,
     clickLeft: () => void,
     clickRight: () => void,
+    clickPause: () => void,
 }
 
 class Stage extends React.Component<Props> {
+
+    renderLoser = () => {
+        if (!this.props.loser) {
+            return null
+        }
+
+        return (
+            <View>
+                <Text>
+                    Game Over – loser: {this.props.loser.color}
+                </Text>
+            </View>
+        )
+    }
 
     render() {
         return (
@@ -29,23 +45,29 @@ class Stage extends React.Component<Props> {
                 </View>
 
                 <View style={styles.buttons}>
-                    <View style={[styles.buttons2, {transform: [{'rotate': '180deg'}]}]}>
-                        <TouchableOpacity style={styles.circle} onPress={() => this.props.clickLeft("snake-1")} >
-                            <Text style={styles.circleText}>L</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style={styles.circle} onPress={() => this.props.clickRight("snake-1")} >
-                            <Text  style={styles.circleText}>R</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.buttons2}>
-                        <TouchableOpacity  style={styles.circle} onPress={() => this.props.clickLeft("snake-2")} >
-                            <Text style={styles.circleText}>L</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style={styles.circle} onPress={() => this.props.clickRight("snake-2")} >
-                            <Text style={styles.circleText}>R</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {this.props.snakes.map(snake => (
+                        <View
+                            key={snake.id}
+                            style={[
+                                styles.buttons2,
+                                {transform: [{'rotate': snake.pos === "top" ? '180deg' : '0deg'}]}
+                            ]}>
+                            <TouchableOpacity style={[styles.circle, { backgroundColor: snake.color }]} onPress={() => this.props.clickLeft(snake.id)} >
+                                <Text style={styles.circleText}>L</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity  style={styles.circleP} onPress={() => this.props.clickPause()} >
+                                <Text  style={styles.circleText}>P</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity  style={[styles.circle, { backgroundColor: snake.color }]} onPress={() => this.props.clickRight(snake.id)} >
+                                <Text  style={styles.circleText}>R</Text>
+                            </TouchableOpacity>
+                        </View>
+                    ))}
                 </View>
+
+                {this.renderLoser()}
             </View>
         )
     }
@@ -78,6 +100,14 @@ const styles = {
         justifyContent: "center",
         margin: 15
     },
+    circleP: {
+        width: 45,
+        height: 45,
+        borderRadius: 15,
+        backgroundColor: "silver",
+        justifyContent: "center",
+        margin: 15,
+    },
     circleText: {
         fontSize: 26,
         color: "white",
@@ -89,11 +119,13 @@ const styles = {
 const mapStateToProps = (state: StateObject) => ({
     snakes: state.snake.snakes,
     world_size: state.snake.world_size,
+    loser: state.snake.loser,
 })
 
 const mapDispatchToProps = {
     clickLeft: clickLeft,
     clickRight: clickRight,
+    clickPause: clickPause,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stage)

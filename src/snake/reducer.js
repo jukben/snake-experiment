@@ -9,6 +9,7 @@ export type Point = {
 
 export type Snake = {
     id: string,
+    pos: string,
     color: string,
     head: Point,
     direction: Point,
@@ -18,6 +19,8 @@ export type Snake = {
 export type SnakeState = {
     snakes: Snake[],
     world_size: Point,
+    paused: boolean,
+    loser: ?Snake,
 }
 
 export const createEmptyState = () => ({
@@ -25,9 +28,12 @@ export const createEmptyState = () => ({
         x: Dimensions.get("window").width,
         y: Dimensions.get("window").height
     },
+    paused: true,
+    loser: null,
     snakes: [
         {
             id: "snake-1",
+            pos: "top",
             color: "green",
             head: {
                 x: Dimensions.get("window").width / 2,
@@ -43,6 +49,7 @@ export const createEmptyState = () => ({
         },
         {
             id: "snake-2",
+            pos: "bottom",
             color: "red",
             head: {
                 x: Dimensions.get("window").width /2,
@@ -80,6 +87,12 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
     }
 
     switch (action.type) {
+        case "CLICK_PAUSE":
+            return {
+                ...state,
+                paused: !state.paused,
+            }
+
         case "CLICK_LEFT": {
             return {
                 ...state,
@@ -103,8 +116,12 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                     : snake)),
             }
 
-        case "RESTART":
-            return createEmptyState()
+        case "GAME_OVER":
+            return {
+                ...state,
+                paused: true,
+                loser: action.payload.loser,
+            }
 
         case "TICK": {
             return {

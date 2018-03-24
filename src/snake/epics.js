@@ -7,10 +7,15 @@ import {newPoint} from "./reducer"
 export const collisionDetectionEpic = (action$, deps) =>
     action$.ofType("TICK")
         .concatMap(() => {
-            if (collision(deps.getState().snake.snakes,
-                    deps.getState().snake.world_size)) {
+            const loser = collision(deps.getState().snake.snakes,
+                deps.getState().snake.world_size)
+
+            if (loser) {
                 return Rx.Observable.of({
-                    type: "RESTART",
+                    type: "GAME_OVER",
+                    payload: {
+                        loser: loser,
+                    },
                 })
             }
             else {
@@ -19,11 +24,14 @@ export const collisionDetectionEpic = (action$, deps) =>
         })
 
 export const tickEpic = (action$, deps) =>
-    Rx.Observable.interval(100).mapTo({type: "TICK"})
+    Rx.Observable
+        .interval(100)
+        .switchMap(() => Rx.Observable.if(
+            () => !deps.getState().snake.paused,
+            [{type: "TICK"}],
+            []))
 
-const collision = (snakes: Snake[], world_size: Point): boolean => {
-
-
+const collision = (snakes: Snake[], world_size: Point): Snake => {
     const all = flatten(snakes.map(s => s.history));
     const col = snakes.find(snake => {
         if (snake.head.x < 0) return true;
@@ -36,5 +44,5 @@ const collision = (snakes: Snake[], world_size: Point): boolean => {
             }
         )
     })
-    return col != null
+    return col
 }

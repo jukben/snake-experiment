@@ -17,3 +17,7 @@ export const clickRight = (player: string) => ({
         player: player,
     },
 })
+
+export const clickPause = () => ({
+    type: "CLICK_PAUSE",
+})
