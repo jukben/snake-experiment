@@ -46,7 +46,7 @@ export const createEmptyState = () => ({
                 y: 100,
             },
             direction: {
-                x: -5,
+                x: 5,
                 y: 0,
             },
             history: [
@@ -59,7 +59,7 @@ export const createEmptyState = () => ({
     ],
 })
 
-const newPoint = (pos: Point, angle: Point): Point => ({
+export const newPoint = (pos: Point, angle: Point): Point => ({
     x: pos.x + angle.x,
     y: pos.y + angle.y,
 })
@@ -103,16 +103,10 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                     : snake)),
             }
 
-        case "TICK": {
-            // const snake1 = state.snakes[0]
-            // const next = newPoint(snake1.head, snake1.direction)
-            // const colision = snake1.history.find(p =>
-            //     ((p.x - next.x) * (p.x - next.x)
-            //         + (p.y - next.y) * (p.y - next.y)) < 16)
-            // if (colision) {
-            //     return createEmptyState()
-            // }
+        case "RESTART":
+            return createEmptyState()
 
+        case "TICK": {
             return {
                 ...state,
                 snakes: state.snakes.map(snake => {

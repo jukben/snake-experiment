@@ -21,9 +21,12 @@
   },
   "dependencies": {
     "expo": "^25.0.0",
+    "lodash": "^4.17.5",
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-redux": "^5.0.7",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-observable": "^0.18.0",
+    "rxjs": "^5.5.7"
   }
 }

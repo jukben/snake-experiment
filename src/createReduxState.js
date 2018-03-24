@@ -1,8 +1,10 @@
 // @flow
 
-import { combineReducers, createStore } from "redux"
+import { applyMiddleware, combineReducers, compose, createStore } from "redux"
 import { snakeReducer } from "./snake/reducer"
+import { combineEpics, createEpicMiddleware } from "redux-observable"
 import type { SnakeState } from "./snake/reducer"
+import { collisionDetectionEpic } from "./snake/epics"
 
 
 export const actionButtonClick = () => ({
@@ -42,5 +44,10 @@ export default () => {
         snake: snakeReducer,
     })
 
-    return createStore(reducer)
+    const rootEpic = combineEpics(collisionDetectionEpic)
+
+    return createStore(
+        reducer,
+        compose(applyMiddleware(
+            createEpicMiddleware(rootEpic))))
 }
