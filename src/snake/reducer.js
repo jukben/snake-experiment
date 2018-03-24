@@ -1,4 +1,5 @@
 // @flow
+import {Dimensions} from "react-native"
 
 
 export type Point = {
@@ -16,9 +17,14 @@ export type Snake = {
 
 export type SnakeState = {
     snakes: Snake[],
+    world_size: Point,
 }
 
 export const createEmptyState = () => ({
+    world_size: {
+        x: Dimensions.get("window").width - 42,
+        y: Dimensions.get("window").height - 42
+    },
     snakes: [
         {
             id: "snake-1",
@@ -46,8 +52,8 @@ export const createEmptyState = () => ({
                 y: 100,
             },
             direction: {
-                x: 5,
-                y: 0,
+                x: -5,
+                y: -5,
             },
             history: [
                 {
@@ -65,7 +71,7 @@ export const newPoint = (pos: Point, angle: Point): Point => ({
 })
 
 const rotateVector = (vec: Point, ang) => {
-    const rad = -ang * (Math.PI/180)
+    const rad = -ang * (Math.PI / 180)
     const cos = Math.cos(rad)
     const sin = Math.sin(rad)
     return {

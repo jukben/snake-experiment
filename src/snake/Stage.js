@@ -10,6 +10,7 @@ import { actionTick, clickLeft, clickRight } from "./actions"
 
 type Props = {
     snakes: Snake[],
+    world_size: Point,
     clickLeft: () => void,
     clickRight: () => void,
 }
@@ -19,7 +20,9 @@ class Stage extends React.Component<Props> {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.stage}>
+                <View style={[styles.stage, {
+                        width: this.props.world_size.x,
+                        height: this.props.world_size.y}]}>
                     {this.props.snakes.map(snake => (
                         <SnakeComponent key={snake.id} snake={snake} />
                     ))}
@@ -43,17 +46,14 @@ class Stage extends React.Component<Props> {
 const styles = {
     container: {
         flex: 1,
+        justifyContent: 'center',
     },
     stage: {
-        position: "absolute",
-        bottom: 100,
-        top: 100,
-        left: 20,
-        right: 20,
         borderColor: "grey",
         borderWidth: 0.5,
         borderRadius: 10,
         backgroundColor: "lightgrey",
+        alignSelf: "center",
     },
     buttons: {
         position: "absolute",
@@ -66,6 +66,7 @@ const styles = {
 
 const mapStateToProps = (state: StateObject) => ({
     snakes: state.snake.snakes,
+    world_size: state.snake.world_size,
 })
 
 const mapDispatchToProps = {
