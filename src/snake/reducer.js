@@ -94,6 +94,9 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
             }
 
         case "CLICK_LEFT": {
+            if (state.paused) {
+                return state
+            }
             return {
                 ...state,
                 snakes: state.snakes.map(snake => (snake.id === action.payload.player
@@ -105,7 +108,10 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
             }
         }
 
-        case "CLICK_RIGHT":
+        case "CLICK_RIGHT": {
+            if (state.paused) {
+                return state
+            }
             return {
                 ...state,
                 snakes: state.snakes.map(snake => (snake.id === action.payload.player
@@ -115,6 +121,7 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                     }
                     : snake)),
             }
+        }
 
         case "GAME_OVER":
             return {
@@ -122,6 +129,9 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                 paused: true,
                 loser: action.payload.loser,
             }
+
+        case "CLICK_RESTART":
+            return createEmptyState()
 
         case "TICK": {
             return {
@@ -131,7 +141,9 @@ export const snakeReducer = (state: ?SnakeState, action: Object): SnakeState => 
                     return {
                         ...snake,
                         head: next,
-                        history: [...snake.history, next],
+                        // history: [...snake.history, next],
+                        history: [...snake.history.slice(-50), next],
+                        // history: [next],
                     }
                 }),
             }

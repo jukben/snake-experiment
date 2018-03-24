@@ -21,3 +21,11 @@ export const clickRight = (player: string) => ({
 export const clickPause = () => ({
     type: "CLICK_PAUSE",
 })
+
+export const clickSettings = () => ({
+    type: "CLICK_SETTINGS",
+})
+
+export const clickRestart = () => ({
+    type: "CLICK_RESTART",
+})

@@ -1,20 +1,25 @@
 // @flow
 
 import React from "react"
-import { Button, Text, TouchableOpacity, View } from "react-native"
+import { Button, Text, TouchableOpacity, View, TouchableWithoutFeedback } from "react-native"
+import { View as AnimatableView } from "react-native-animatable"
 import type { Snake } from "./reducer"
 import SnakeComponent from "./SnakeComponent"
 import { connect } from "react-redux"
-import { actionTick, clickLeft, clickPause, clickRight } from "./actions"
+import { actionTick, clickLeft, clickPause, clickRestart, clickRight, clickSettings } from "./actions"
+import { FontAwesome } from "@expo/vector-icons"
 
 
 type Props = {
     snakes: Snake[],
+    paused: boolean,
     world_size: Point,
     loser: ?Snake,
     clickLeft: () => void,
     clickRight: () => void,
     clickPause: () => void,
+    clickSettings: () => void,
+    clickRestart: () => void,
 }
 
 class Stage extends React.Component<Props> {
@@ -25,18 +30,20 @@ class Stage extends React.Component<Props> {
         }
 
         return (
-            <View style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                justifyContent: "center"
-            }}>
-                <View style={styles.gameOverModal}>
-                    <Text style={[styles.gameOverModalText, { color: this.props.loser.color }]}>
-                        Game Over: {this.props.loser.color} is loser
-                    </Text>
-                </View>
-            </View>
+            <TouchableWithoutFeedback onPress={this.props.clickRestart}>
+                <AnimatableView animation="zoomIn" style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    justifyContent: "center"
+                }}>
+                    <View style={styles.gameOverModal}>
+                        <Text style={[styles.gameOverModalText, { color: this.props.loser.color }]}>
+                            Game Over: {this.props.loser.color} is loser
+                        </Text>
+                    </View>
+                </AnimatableView>
+            </TouchableWithoutFeedback>
         )
     }
 
@@ -64,7 +71,11 @@ class Stage extends React.Component<Props> {
                             </TouchableOpacity>
 
                             <TouchableOpacity  style={styles.circleP} onPress={() => this.props.clickPause()} >
-                                <Text  style={styles.circleText}>P</Text>
+                                <FontAwesome style={{textAlign:"center"}} name={this.props.paused ? "play" : "pause"} size={26} color="white" />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity  style={styles.circleP} onPress={() => this.props.clickSettings()} >
+                                <FontAwesome style={{textAlign:"center"}} name="gear" size={26} color="white" />
                             </TouchableOpacity>
 
                             <TouchableOpacity  style={[styles.circle, { backgroundColor: snake.color }]} onPress={() => this.props.clickRight(snake.id)} >
@@ -122,10 +133,12 @@ const styles = {
         textAlign: "center"
     },
     gameOverModal: {
-        backgroundColor: "#AAAAAAAA",
+        backgroundColor: "#ffffffaa",
         padding: 15,
         paddingVertical: 40,
         borderRadius: 10,
+        borderWidth: 5,
+        borderColor: "silver",
         margin: 50,
     },
     gameOverModalText: {
@@ -139,12 +152,15 @@ const mapStateToProps = (state: StateObject) => ({
     snakes: state.snake.snakes,
     world_size: state.snake.world_size,
     loser: state.snake.loser,
+    paused: state.snake.paused,
 })
 
 const mapDispatchToProps = {
     clickLeft: clickLeft,
     clickRight: clickRight,
     clickPause: clickPause,
+    clickSettings: clickSettings,
+    clickRestart: clickRestart,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Stage)
