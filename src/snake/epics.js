@@ -1,4 +1,6 @@
+
 import * as Rx from "rxjs"
+import { Vibration } from "react-native"
 import type {Snake} from "./reducer"
 import {flatten} from "lodash"
 import {newPoint} from "./reducer"
@@ -11,6 +13,8 @@ export const collisionDetectionEpic = (action$, deps) =>
                 deps.getState().snake.world_size)
 
             if (loser) {
+                Vibration.vibrate(500)
+
                 return Rx.Observable.of({
                     type: "GAME_OVER",
                     payload: {

@@ -25,10 +25,17 @@ class Stage extends React.Component<Props> {
         }
 
         return (
-            <View>
-                <Text>
-                    Game Over – loser: {this.props.loser.color}
-                </Text>
+            <View style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                justifyContent: "center"
+            }}>
+                <View style={styles.gameOverModal}>
+                    <Text style={[styles.gameOverModalText, { color: this.props.loser.color }]}>
+                        Game Over: {this.props.loser.color} is loser
+                    </Text>
+                </View>
             </View>
         )
     }
@@ -113,6 +120,18 @@ const styles = {
         color: "white",
         fontWeight: "bold",
         textAlign: "center"
+    },
+    gameOverModal: {
+        backgroundColor: "#AAAAAAAA",
+        padding: 15,
+        paddingVertical: 40,
+        borderRadius: 10,
+        margin: 50,
+    },
+    gameOverModalText: {
+        textAlign: "center",
+        fontSize: 16,
+        fontWeight: "bold"
     }
 }
 
