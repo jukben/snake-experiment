@@ -1,6 +1,8 @@
 // @flow
 
 import { combineReducers, createStore } from "redux"
+import { snakeReducer } from "./snake/reducer"
+import type { SnakeState } from "./snake/reducer"
 
 
 export const actionButtonClick = () => ({
@@ -13,6 +15,7 @@ export type DataState = {
 
 export type StateObject = {
     data: DataState,
+    snake: SnakeState,
 }
 
 const dataReducer = (state: ?DataState, action: Object): DataState => {
@@ -34,9 +37,9 @@ const dataReducer = (state: ?DataState, action: Object): DataState => {
 }
 
 export default () => {
-
     const reducer = combineReducers({
         data: dataReducer,
+        snake: snakeReducer,
     })
 
     return createStore(reducer)

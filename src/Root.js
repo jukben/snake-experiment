@@ -6,6 +6,7 @@ import { connect } from "react-redux"
 import Component from "./Component"
 import { actionButtonClick } from "./createReduxState"
 import { getGreetings } from "./selectors"
+import Stage from "./snake/Stage"
 
 
 type Props = {
@@ -37,11 +38,7 @@ class Root extends React.Component<Props, State> {
     render() {
         return (
             <View style={styles.container}>
-                <Component color={this.state.color1} />
-                <Component color={this.state.color2} />
-                <Component color="blue" />
-                <Component color="yellow" />
-                <Button onPress={this.handleClick} title={this.props.message} />
+                <Stage />
             </View>
         )
     }
